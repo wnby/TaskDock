@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QListWidget,
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QTimer, QEasingCurve
 from PyQt5.QtGui import QColor, QFont, QIcon
 
-# === 1. 数据管理 ===
 class TaskManager:
     def __init__(self, filename="tasks.json"):
         self.filename = filename
@@ -62,7 +61,7 @@ class TaskManager:
             if not t["done"]: count += 1
         return count
 
-# === 2. 界面元素 ===
+# === 界面 ===
 class FancyItemWidget(QWidget):
     def __init__(self, text, is_done, is_daily):
         super().__init__()
@@ -95,7 +94,7 @@ class FancyItemWidget(QWidget):
         layout.addWidget(self.lbl_type)
         self.setLayout(layout)
 
-# === 3. 主窗口 ===
+# === 主窗口 ===
 class FancyDock(QWidget):
     def __init__(self):
         super().__init__()
@@ -114,7 +113,6 @@ class FancyDock(QWidget):
         self.refresh_list()
         self.reset_position()
 
-        # === 新增：提醒定时器 ===
         # 每隔 45 分钟检查一次 (45 * 60 * 1000 毫秒)
         self.reminder_timer = QTimer(self)
         self.reminder_timer.timeout.connect(self.check_reminders)
@@ -131,7 +129,7 @@ class FancyDock(QWidget):
                 QSystemTrayIcon.Information, 
                 5000 # 显示5秒
             )
-            # 视觉提醒：让把手变成红色
+            # 让把手变成红色
             self.neon_strip.setStyleSheet("background-color: #FF0000; border-radius: 3px;")
 
     def reset_position(self):
@@ -257,7 +255,6 @@ class FancyDock(QWidget):
         menu.addAction("❌ 退出", QApplication.instance().quit)
         self.tray.setContextMenu(menu)
         self.tray.show()
-        # 启动欢迎气泡
         self.tray.showMessage("已启动", "我在右上角等你哦", QSystemTrayIcon.Information, 2000)
 
     # --- 业务逻辑 ---
@@ -319,7 +316,7 @@ class FancyDock(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setQuitOnLastWindowClosed(False) # 关键：防止关闭窗口后退出
+    app.setQuitOnLastWindowClosed(False) 
     dock = FancyDock()
     dock.show()
     sys.exit(app.exec_())
